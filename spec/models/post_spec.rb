@@ -3,6 +3,7 @@ require_relative '../spec_helper_lite'
 stub_module 'ActiveModel::Naming'
 stub_module 'ActiveModel::Conversion'
 require_relative '../../app/models/post'
+require 'date' # for DateTime
 
 describe Post do
   before do
@@ -49,6 +50,32 @@ describe Post do
     it 'adds the post to the blog' do
       @blog.expect :add_entry, nil, [@it]
       @it.publish
+    end
+  end
+
+  describe '#pubdate' do
+    describe 'before publishing' do
+      it 'is blank' do
+        @it.pubdate.must_be_nil
+      end
+    end
+
+    describe 'after publishing' do
+      before do
+        @clock = stub!
+        @now = DateTime.parse('2017-10-16T08:14')
+        stub(@clock).now(){@now}
+        @it.blog = stub!
+        @it.publish(@clock)
+      end
+
+      it 'is a datetime' do
+        @it.pubdate.class.must_equal(DateTime)
+      end
+
+      it 'is the current time' do
+        @it.pubdate.must_equal(@now)
+      end
     end
   end
 end

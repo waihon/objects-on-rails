@@ -37,5 +37,9 @@ gem 'jquery-rails'
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
-# Required by rails console
-gem 'test-unit'
+group :development, :test do
+  # Required by rails console
+  gem 'test-unit'
+  # RR is a test double framework that features a rich selection of double techniques and a terse syntax.
+  gem 'rr'
+end

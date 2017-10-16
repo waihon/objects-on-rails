@@ -1,3 +1,11 @@
+require 'rr'
+
+# RR now has an autohook system. We don't need to `include RR::Adapters::*`
+# in our test framework's base class anymore.
+# class MiniTest::Unit::TestCase
+#   include RR::Adapters::MiniTest
+# end
+
 def stub_module(full_name)
   full_name.to_s.split(/::/).inject(Object) do |context, name|
     # context will be assgined Object only on first pass. On subsequent pass
