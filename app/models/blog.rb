@@ -1,5 +1,6 @@
 class Blog
   attr_reader :entries
+  # Use setter injection to startegize how Blog objects create new entries.
   attr_writer :post_source
 
   def initialize
@@ -15,6 +16,8 @@ class Blog
   end
 
   def new_post(*args)
+    # Blog#new_post depends only on "some callable which will return a post when called".
+    # We explicitly hold off from binding Blog to the Post class interface.
     post_source.call(*args).tap do |p|
       p.blog = self
     end
@@ -26,7 +29,9 @@ class Blog
 
 private
 
+  # This is actually a factory, as in "the Factory pattern"
   def post_source
+    # A sensible default for setter injection, which is a type of dependency injection.
     @post_source ||= Post.public_method(:new)
   end
 end
