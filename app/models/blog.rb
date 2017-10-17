@@ -1,3 +1,5 @@
+require 'active_model'
+
 class Blog
   # Use setter injection to startegize how Blog objects create new entries.
   attr_writer :post_source

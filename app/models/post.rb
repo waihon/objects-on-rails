@@ -1,9 +1,13 @@
 require 'date' # for DateTime
+require 'active_model'
 
 class Post
   # Augment Post with ActiveModel modules
   extend ActiveModel::Naming
   include ActiveModel::Conversion
+  include ActiveModel::Validations
+
+  validates :title, presence: true
 
   attr_accessor :blog, :title, :body, :pubdate
 
@@ -13,6 +17,7 @@ class Post
 
   def publish(clock=DateTime)
     # A sensible default for parameter injection, a type of dependency injection.
+    return false unless valid?
     self.pubdate = clock.now
     blog.add_entry(self)
   end
