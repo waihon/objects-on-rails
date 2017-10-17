@@ -1,5 +1,4 @@
 class Blog
-  attr_reader :entries
   # Use setter injection to startegize how Blog objects create new entries.
   attr_writer :post_source
 
@@ -24,7 +23,11 @@ class Blog
   end
 
   def add_entry(entry)
-    entries << entry
+    @entries << entry
+  end
+
+  def entries
+    @entries.sort_by{ |e| e.pubdate }.reverse.take(10)
   end
 
 private

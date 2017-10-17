@@ -1,6 +1,8 @@
 require 'minitest/autorun'
+require_relative '../spec_helper_lite'
 require_relative '../../app/models/blog'
 require 'ostruct'
+require 'date'
 
 describe Blog do
   before do
@@ -31,14 +33,40 @@ describe Blog do
       @it.post_source = post_source
       @it.new_post(x: 42, y: 'z')
       post_source.verify
-    end    
+    end
   end
 
   describe '#add_entry' do
     it 'adds the entry to the blog' do
-      entry = Object.new
+      entry = stub!
       @it.add_entry(entry)
       @it.entries.must_include(entry)
+    end
+  end
+
+  describe '#entries' do
+    def stub_entry_with_date(date)
+      OpenStruct.new(pubdate: DateTime.parse(date))
+    end
+
+    it 'is sorted in reverse-chronological order' do
+      oldest = stub_entry_with_date('2017-10-09')
+      newest = stub_entry_with_date('2017-10-11')
+      middle = stub_entry_with_date('2017-10-10')
+      @it.add_entry(oldest)
+      @it.add_entry(newest)
+      @it.add_entry(middle)
+      @it.entries.must_equal([newest, middle, oldest])
+    end
+
+    it 'is limited to 10 items' do
+      10.times do |i|
+        @it.add_entry(stub_entry_with_date("2017-10-#{i+1}"))
+      end
+      oldest = stub_entry_with_date('2017-09-30')
+      @it.add_entry(oldest)
+      @it.entries.size.must_equal(10)
+      @it.entries.wont_include(oldest)
     end
   end
 end
