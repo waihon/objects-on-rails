@@ -42,4 +42,6 @@ group :development, :test do
   gem 'test-unit'
   # RR is a test double framework that features a rich selection of double techniques and a terse syntax.
   gem 'rr'
+  # To use debugger
+  gem 'byebug'
 end

@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'rr'
 
 # RR now has an autohook system. We don't need to `include RR::Adapters::*`
@@ -19,6 +20,16 @@ def stub_module(full_name)
       # #const_get failes to turn up the module so define an anonymouis empty
       # module to act as a placeholder
       context.const_set(name, Module.new)
+    end
+  end
+end
+
+def stub_class(full_name)
+  full_name.to_s.split(/::/).inject(Object) do |context, name|
+    begin
+      context.const_get(name)
+    rescue NameError
+      context.const_set(name, Class.new)
     end
   end
 end

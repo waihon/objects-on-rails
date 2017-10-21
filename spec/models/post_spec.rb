@@ -1,4 +1,3 @@
-require 'minitest/autorun'
 require_relative '../spec_helper_lite'
 require_relative '../../app/models/post'
 require 'date' # for DateTime
@@ -51,6 +50,7 @@ describe Post do
     before do
       @blog = MiniTest::Mock.new
       @it.blog = @blog
+      @it.title = 'TITLE'
     end
 
     after do
@@ -87,8 +87,9 @@ describe Post do
       before do
         @clock = stub!
         @now = DateTime.parse('2017-10-16T08:14')
-        stub(@clock).now(){@now}
+        stub(@clock).now() { @now }
         @it.blog = stub!
+        @it.title = 'TITLE'
         @it.publish(@clock)
       end
 
@@ -99,6 +100,18 @@ describe Post do
       it 'is the current time' do
         @it.pubdate.must_equal(@now)
       end
+    end
+  end
+
+  describe '#picture?' do
+    it 'is true when the post has a picture URL' do
+      @it.image_url = 'http://example.org/foo.png'
+      assert(@it.picture?)
+    end
+
+    it 'is false when the psot has no picture URL' do
+      @it.image_url = ''
+      refute(@it.picture?)
     end
   end
 end

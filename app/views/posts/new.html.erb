@@ -2,5 +2,8 @@
 <%= form_for @post do |f| %>
   <%= f.text_field :title %>
   <%= f.text_area :body %>
+  <!-- https://cdn.xl.thumbs.canstockphoto.com/canstock22303136.jpg -->
+  <%= label :image_url, 'Picture URL:' %>
+  <%= f.text_field :image_url %>
   <%= f.submit %>
 <% end %>
