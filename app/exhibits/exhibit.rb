@@ -20,4 +20,42 @@ class Exhibit < SimpleDelegator
   def class
     __getobj__.class
   end
+
+  def self.exhibit(object, context)
+    # Iterate through a list of pre-defined exhibits, giving each one an
+    # opportunity to wrap the provided object.
+    # It strongly resembles but differs from the traditional version of Chain
+    # of Responsibility pattern in that it doesn't return as soon as the first
+    # exhibit capable of wrapping the object is found.
+    exhibits.inject(object) do |object, exhibit|
+      exhibit.exhibit_if_applicable(object, context)
+    end
+  end
+
+  # An example of "Tell, Don't Ask". This keeps the .exhibit logic nicely focused
+  # on one and only one thing: giving each exhibit an opportunity to apply itself
+  # to the object at hand.
+  def self.exhibit_if_applicable(object, context)
+    if applicable_to?(object)
+      new(object, context)
+    else
+      object
+    end
+  end
+
+  def self.applicable_to?(object)
+    # Subclasses will have to implement it to match applicable objects.
+    false
+  end
+
+  def self.exhibits
+    # The advantage of hard-coding this list is that it ensures a consistent and
+    # obvious ordering of exhibits. We know which exhibits may be applied, and
+    # we know the order in which they will be tried.
+    [
+      TextPostExhibit,
+      PicturePostExhibit,
+      LinkExhibit
+    ]
+  end
 end
