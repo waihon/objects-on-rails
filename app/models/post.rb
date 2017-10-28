@@ -1,5 +1,5 @@
 require 'date' # for DateTime
-require 'active_model'
+require 'active_record'
 
 class Post < ActiveRecord::Base
   validates :title, presence: true

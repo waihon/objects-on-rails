@@ -1,6 +1,6 @@
-require_relative '../spec_helper_lite'
+require_relative '../spec_helper_full'
 require_relative '../../app/models/post'
-require 'date' # for DateTime
+require 'active_support'
 
 describe Post do
   before do
@@ -94,7 +94,8 @@ describe Post do
       end
 
       it 'is a datetime' do
-        @it.pubdate.class.must_equal(DateTime)
+        # @it.pubdate.class.must_equal(DateTime)
+        @it.pubdate.class.must_equal(ActiveSupport::TimeWithZone)
       end
 
       it 'is the current time' do

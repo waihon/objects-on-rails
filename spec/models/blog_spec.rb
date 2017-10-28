@@ -1,4 +1,4 @@
-require_relative '../spec_helper_lite'
+require_relative '../spec_helper_full'
 require_relative '../../app/models/blog'
 require 'ostruct'
 require 'date'
@@ -40,7 +40,7 @@ describe Blog do
   describe '#add_entry' do
     it 'adds the entry to the blog' do
       entry = stub!
-      mock(entry).save)
+      mock(entry).save
       @it.add_entry(entry)
     end
   end

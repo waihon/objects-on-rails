@@ -1,4 +1,4 @@
-require_relative '../spec_helper_lite'
+require_relative '../spec_helper_full'
 require_relative '../../app/helpers/exhibits_helper'
 
 # stub_class returns Class.new which caused this particular test to fail.
