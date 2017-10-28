@@ -45,3 +45,7 @@ group :development, :test do
   # To use debugger
   gem 'byebug'
 end
+
+group :test do
+  gem 'database_cleaner'
+end
