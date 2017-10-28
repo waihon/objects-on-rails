@@ -5,6 +5,7 @@ require 'active_support'
 describe Post do
   before do
     @it = Post.new
+    @ar = @it
   end
 
   it 'starts with blank attributes' do
@@ -63,7 +64,9 @@ describe Post do
     end
 
     describe 'given an invalid post' do
-      before do @it.title = nil end
+      before do
+        stub(@ar).valid? { false }
+      end
 
       it "won't add the post to the blog" do
         dont_allow(@blog).add_entry
