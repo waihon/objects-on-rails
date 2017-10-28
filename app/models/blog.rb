@@ -4,8 +4,9 @@ class Blog
   # Use setter injection to startegize how Blog objects create new entries.
   attr_writer :post_source
 
-  def initialize
-    @entries = []
+  # The default method for fetching a list of entires is to call Post.all
+  def initialize(entry_fetcher = Post.public_method(:all))
+    @entry_fetcher = entry_fetcher
   end
 
   def title
@@ -25,11 +26,11 @@ class Blog
   end
 
   def add_entry(entry)
-    @entries << entry
+    entry.save
   end
 
   def entries
-    @entries.sort_by{ |e| e.pubdate }.reverse.take(10)
+    fetch_entries.sort_by{ |e| e.pubdate }.reverse.take(10)
   end
 
 private
@@ -38,5 +39,9 @@ private
   def post_source
     # A sensible default for setter injection, which is a type of dependency injection.
     @post_source ||= Post.public_method(:new)
+  end
+
+  def fetch_entries
+    @entry_fetcher.()
   end
 end
